@@ -4,7 +4,8 @@ import  axios from 'axios';
 export default createStore({
   state: {
     counter: 0,
-    colorCode: "red"
+    colorCode: "red",
+    showModal: false,
   },
   getters: {
     counterSquared: state => {
@@ -21,6 +22,9 @@ export default createStore({
      SET_COLOR_CODE(state, newValue) {
       state.colorCode = newValue;
     },
+    setShowModal(state, value) {
+      state.showModal = value;
+    },
   },     
   actions: {
     DECREMENT_COUNTER({commit}){
@@ -33,7 +37,13 @@ export default createStore({
     },
     SET_COLOR_CODE({commit}, newValue){
       commit('SET_COLOR_CODE', newValue);
-  }
+  },
+  openModal({ commit }) {
+    commit('setShowModal', true);
+  },
+  closeModal({ commit }) {
+    commit('setShowModal', false);
+  },
 },
   modules: {
   }

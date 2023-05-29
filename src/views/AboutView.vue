@@ -9,11 +9,25 @@
       </p>
     </ul>
   </div>
+
+  <div style="width:500px;height:400px; background-color:pink"> 
+    <button @click="openModal">Open Modal</button>
+
+    <div v-if="showModal" class="modal">
+      <!-- Modal content goes here -->
+      <h2>Modal Title</h2>
+      <p>Modal content...</p>
+
+      <button @click="closeModal">Close Modal</button>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue';
-import { computed } from 'vue';
+import { useStore } from 'vuex';
+import { reactive, computed } from 'vue';
+
+const store = useStore();
 
 const state = reactive({
   items: [
@@ -21,22 +35,26 @@ const state = reactive({
     { id: 2, title: 'Banana', subtitle: 'Yellow and curved' },
     { id: 3, title: 'Orange', subtitle: 'Orange and juicy' },
     { id: 4, title: 'Grapes', subtitle: 'Small and sweet' },
-    { id: 5, title: 'Mango', subtitle: 'Tropical and flavorful' },
-    { id: 6, title: 'Pineapple', subtitle: 'Sweet and tangy' },
-    { id: 7, title: 'Strawberry', subtitle: 'Red and juicy' },
-    { id: 8, title: 'Watermelon', subtitle: 'Refreshing and summery' },
+    
   ],
   searchQuery: '',
 });
-
-
-
 
 const filteredItems = computed(() => {
   const query = state.searchQuery.toLowerCase();
   return state.items.filter(item => item.title.toLowerCase().includes(query));
 });
 
+const openModal = () => {
+  store.commit('setShowModal', true);
+};
+
+const closeModal = () => {
+  store.commit('setShowModal', false);
+};
+
+const showModal = computed(() => store.state.showModal);
 
 </script>
+
 
