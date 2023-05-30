@@ -1,7 +1,8 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link> |
-    <router-link to="/about">Search In Vue</router-link>
+    <router-link to="/about">Search</router-link> |
+    <router-link to="/table">Table</router-link>
   </nav>
   <router-view/>
 </template>
