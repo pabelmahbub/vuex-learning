@@ -26,12 +26,32 @@
       </table>
       <button @click="PostRow">POST</button>
     </div>
+    <div>
+
+
+    <button @click="fetchData">Fetch Data</button>
+    <div v-if="loading">Loading...</div>
+    <div v-if="error">{{ error }}</div>
+    <div v-if="data">
+      <p>{{ data}}</p>
+      <ul>
+        <li v-for="item in data" :key="item.id">{{ item.title }}</li>
+      </ul>
+    </div>
+  </div>
   </template>
   
   <script setup>
   import axios from 'axios';
   import { reactive } from 'vue';
-  
+  import { ref } from 'vue';
+
+
+
+
+  const loading = ref(false);
+    const error = ref('');
+    const data = ref(null);
     const tableData = reactive([]);
   
     // Function to add a new row to the table
@@ -59,6 +79,20 @@
     console.error('Error',error);
   }
 };
+
+
+const fetchData = async () => {
+      loading.value = true;
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/watch/stream/review/5');
+        data.value = response.data;
+      } catch (error) {
+        error.value = 'Error fetching data';
+      } finally {
+        loading.value = false;
+      }
+    };
+
   </script>
   
   
