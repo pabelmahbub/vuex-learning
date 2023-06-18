@@ -39,12 +39,45 @@
       </ul>
     </div>
   </div>
+  <p> Post API for drf</p>
+  <div>
+    <label for="title">Title</label>
+    <input type="text" id="title" v-model="watchList.title">
+    <hr/>
+    <label for="storyline">Storyline</label>
+    <input type="text" id="storyline" v-model="watchList.storyline">
+    <hr/>
+    <label for="storyline">Platform</label>
+    <input type="text" id="platform" v-model="watchList.platform">
+    <hr/>
+    <label for="active">Active</label>
+    <input type="checkbox" id="active" v-model="watchList.active">
+    <hr/>
+    <label for="avg_rating">Average Rating</label>
+    <input type="number" id="avg_rating" v-model="watchList.avg_rating">
+    <hr/>
+    <label for="number_rating">Number of Ratings</label>
+    <input type="number" id="number_rating" v-model="watchList.number_rating">
+    <hr/>
+    <button @click="submitForm">Submit</button>
+  </div>
   </template>
   
   <script setup>
-  import axios from 'axios';
+
+  import axios from 'axios'; 
   import { reactive } from 'vue';
   import { ref } from 'vue';
+
+const watchList = ref({
+      title: '',
+      storyline: '',
+      platform: null,
+      active: false,
+      avg_rating: 0,
+      number_rating: 0,
+      created: null
+    });
 
 
 
@@ -92,6 +125,25 @@ const fetchData = async () => {
         loading.value = false;
       }
     };
+  
+
+       // Fetch platforms data from API endpoint
+    // You can use `onMounted` or any other lifecycle hook to fetch the data
+    
+    const submitForm = async () => {
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/watch/list/', watchList.value);
+        console.log(response.data); // Handle the response as per your requirements
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+
+
+
+
+
 
   </script>
   
