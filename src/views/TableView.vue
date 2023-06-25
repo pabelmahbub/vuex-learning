@@ -28,16 +28,31 @@
     </div>
     <div>
 
-  
-  <div style="background-color: rgb(210, 210, 201);padding-bottom:20px">
-    <p>Display and delete data from api</p>
-    <ul>
-      <div v-for="item in items" :key="item.id">
-        {{ item.title }}- {{ item.storyline }}- {{ item.number_rating }}
-        <button style="background-color: rgb(241, 99, 99); width:100px; padding:5px; margin:2px" @click="deleteItem(item.id)">Delete</button>
+      <div style="background-color: rgb(210, 210, 201);padding-bottom:20px">
+      <p>Display and delete data from API</p>
+      <ul>
+        <div v-for="item in items" :key="item.id">
+          {{ item.title }} - {{ item.storyline }} - {{ item.number_rating }}
+          <button style="background-color: rgb(241, 99, 99); width:100px; padding:5px; margin:2px" @click="deleteItem(item.id)">Delete</button>
+        </div>
+      </ul>
+    </div>
+
+
+
+<!-- Modal -->
+<div v-if="showModal">
+      <div style="background-color: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+        <div style="background-color: white; padding: 20px;">
+          <h2>Confirm Deletion</h2>
+          <p>Are you sure you want to delete this item?</p>
+          <div style="display: flex; justify-content: center;">
+            <button style="margin-right: 10px;" @click="confirmDelete">Confirm</button>
+            <button @click="cancelDelete">Cancel</button>
+          </div>
+        </div>
       </div>
-    </ul>
-  </div>
+    </div>
 
 
     <div v-if="loading">Loading...</div>
@@ -153,6 +168,10 @@ const watchList = ref({
 
 //Get the POST data and delete from api:
 const items = ref([]);
+const showModal = ref(false);
+const itemIdToDelete = ref(null);
+
+
 
  const fetchDataOne = () => {
   axios
@@ -181,16 +200,39 @@ const items = ref([]);
     };
 
     const deleteItem = itemId => {
-      axios
-        .delete(`http://127.0.0.1:8000/watch/list/${itemId}/`)
-        .then(response => {
-          // Remove the deleted item from the local items array
-          items.value = items.value.filter(item => item.id !== itemId);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    };
+    // Set the item ID to be deleted and show the modal
+    itemIdToDelete.value = itemId;
+    showModal.value = true;
+  };
+
+
+    const confirmDelete = () => {
+    const itemId = itemIdToDelete.value;
+
+    // Make the delete request to the API
+    axios
+      .delete(`http://127.0.0.1:8000/watch/list/${itemId}/`)
+      .then(response => {
+        // Remove the deleted item from the local items array
+        items.value = items.value.filter(item => item.id !== itemId);
+      })
+      .catch(error => {
+        console.error(error);
+      })
+      .finally(() => {
+        // Reset the modal state and item ID
+        showModal.value = false;
+        itemIdToDelete.value = null;
+      });
+  };
+
+
+  const cancelDelete = () => {
+    // Reset the modal state and item ID
+    showModal.value = false;
+    itemIdToDelete.value = null;
+  };
+
 
 // lifecycle hook
 onMounted(() => {
