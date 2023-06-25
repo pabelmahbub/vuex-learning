@@ -28,7 +28,8 @@
     </div>
     <div>
 
-      <div style="background-color: rgb(210, 210, 201);padding-bottom:100px">
+  
+  <div style="background-color: rgb(210, 210, 201);padding-bottom:20px">
     <p>Display and delete data from api</p>
     <ul>
       <div v-for="item in items" :key="item.id">
@@ -39,7 +40,6 @@
   </div>
 
 
-    <button @click="fetchData">Fetch Data</button>
     <div v-if="loading">Loading...</div>
     <div v-if="error">{{ error }}</div>
     <div v-if="data">
@@ -124,18 +124,6 @@ const watchList = ref({
   }
 };
 
-
-const fetchData = async () => {
-      loading.value = true;
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/watch/stream/review/5');
-        data.value = response.data;
-      } catch (error) {
-        error.value = 'Error fetching data';
-      } finally {
-        loading.value = false;
-      }
-    };
   
 
        // Fetch platforms data from API endpoint
@@ -145,8 +133,19 @@ const fetchData = async () => {
       try {
         const response = await axios.post('http://127.0.0.1:8000/watch/list/', watchList.value);
         console.log(response.data); // Handle the response as per your requirements
+              // Reset the watchList object to clear the input fields
+      watchList.value = {
+        title: '',
+        storyline: '',
+        platform: null,
+        active: false,
+        avg_rating: 0,
+        number_rating: 0,
+        created: null
+      };
+
       } catch (error) {
-        console.error(error);
+        alert(error);
       }
     };
 
@@ -155,11 +154,7 @@ const fetchData = async () => {
 //Get the POST data and delete from api:
 const items = ref([]);
 
-    onMounted(() => {
-      fetchDataOne();
-    });
-
-    const fetchDataOne = () => {
+ const fetchDataOne = () => {
   axios
     .get('http://127.0.0.1:8000/watch/list/')
     .then(response => {
@@ -197,7 +192,13 @@ const items = ref([]);
         });
     };
 
+// lifecycle hook
+onMounted(() => {
+    fetchDataOne();
 
+    // Call fetchDataOne every 5 seconds
+    setInterval(fetchDataOne, 1000);
+  });
 
   </script>
   
