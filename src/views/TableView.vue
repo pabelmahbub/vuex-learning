@@ -28,6 +28,16 @@
     </div>
     <div>
 
+      <div style="background-color: rgb(210, 210, 201);padding-bottom:100px">
+    <p>Display and delete data from api</p>
+    <ul>
+      <div v-for="item in items" :key="item.id">
+        {{ item.title }}- {{ item.storyline }}- {{ item.number_rating }}
+        <button style="background-color: rgb(241, 99, 99); width:100px; padding:5px; margin:2px" @click="deleteItem(item.id)">Delete</button>
+      </div>
+    </ul>
+  </div>
+
 
     <button @click="fetchData">Fetch Data</button>
     <div v-if="loading">Loading...</div>
@@ -68,6 +78,7 @@
   import axios from 'axios'; 
   import { reactive } from 'vue';
   import { ref } from 'vue';
+  import { onMounted } from 'vue';
 
 const watchList = ref({
       title: '',
@@ -141,7 +152,50 @@ const fetchData = async () => {
 
 
 
+//Get the POST data and delete from api:
+const items = ref([]);
 
+    onMounted(() => {
+      fetchDataOne();
+    });
+
+    const fetchDataOne = () => {
+  axios
+    .get('http://127.0.0.1:8000/watch/list/')
+    .then(response => {
+      items.value = response.data;
+      console.log(items.value);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+};
+
+
+     const addNewItem = newItem => {
+      axios
+        .post('http://127.0.0.1:8000/watch/list/', newItem)
+        .then(response => {
+          // Successfully added the new item
+          console.log(response.data);
+          fetchDataOne(); // Trigger the GET request to fetch the updated data
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    };
+
+    const deleteItem = itemId => {
+      axios
+        .delete(`http://127.0.0.1:8000/watch/list/${itemId}/`)
+        .then(response => {
+          // Remove the deleted item from the local items array
+          items.value = items.value.filter(item => item.id !== itemId);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    };
 
 
 
