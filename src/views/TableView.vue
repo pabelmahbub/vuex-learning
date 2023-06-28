@@ -105,7 +105,13 @@ const watchList = ref({
       created: null
     });
 
-
+//5 rows created when component is mounted:
+    onMounted(() => {
+      // Create initial rows with five columns
+      for (let i = 0; i < 5; i++) {
+        addRow();
+      }
+    });
 
 
   const loading = ref(false);
