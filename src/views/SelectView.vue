@@ -17,10 +17,12 @@
           <td v-for="(item, colIndex) in row" :key="colIndex">
             {{ item }}
           </td>
-          
-              <input type="checkbox" v-model="selectedRows" :value="row" class="checkbox_sso"/>
-            
-
+          <td>
+            <label >
+              <input type="checkbox" @change="toggleRow(row)" />
+              <span class="checkmark"></span>
+            </label>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -30,11 +32,10 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 
-export default {
-  setup() {
+
     const tableData = ref([
       ['Row 1, Column 1', 'Row 1, Column 2', 'Row 1, Column 3', 'Row 1, Column 4', 'Row 1, Column 5'],
       ['Row 2, Column 1', 'Row 2, Column 2', 'Row 2, Column 3', 'Row 2, Column 4', 'Row 2, Column 5'],
@@ -45,12 +46,17 @@ export default {
 
     const selectedRows = ref([]);
 
-    return {
-      tableData,
-      selectedRows,
+    const toggleRow = (row) => {
+      if (selectedRows.value.includes(row)) {
+        selectedRows.value = selectedRows.value.filter((selectedRow) => selectedRow !== row);
+      } else {
+        selectedRows.value.push(row);
+      }
     };
-  },
-};
+
+    
+  
+
 </script>
 <style scoped>
 </style>
