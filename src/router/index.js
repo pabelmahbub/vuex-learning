@@ -17,6 +17,11 @@ const routes = [
     name: 'table',
     component: () => import('../views/TableView.vue')
   },
+  {
+    path: '/select',
+    name: 'select',
+    component: () => import('../views/SelectView.vue')
+  },
 ]
 
 const router = createRouter({

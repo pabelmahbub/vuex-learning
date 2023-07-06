@@ -2,7 +2,8 @@
   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">Search</router-link> |
-    <router-link to="/table">Table</router-link>
+    <router-link to="/table">Table</router-link> |
+    <router-link to="/select">Select</router-link>
   </nav>
   <router-view/>
 </template>
