@@ -86,6 +86,11 @@
     <hr/>
     <button @click="submitForm">Submit</button>
   </div>
+
+  <div>
+    <button @click="downloadData">Download Excel</button>
+  </div>
+
   </template>
   
   <script setup>
@@ -94,6 +99,7 @@
   import { reactive } from 'vue';
   import { ref } from 'vue';
   import { onMounted } from 'vue';
+  import * as XLSX from 'xlsx';
 
 const watchList = ref({
       title: '',
@@ -247,6 +253,115 @@ onMounted(() => {
     // Call fetchDataOne every 5 seconds
     setInterval(fetchDataOne, 1000);
   });
+
+ 
+  //download data in xlxs
+  const dataDownload = [
+      {
+        id: 1,
+        watchlist: [
+          {
+            id: 51,
+            reviews: [],
+            title: 'TItanic',
+            storyline: 'Best movie',
+            active: true,
+            avg_rating: 4.7,
+            number_rating: 60,
+            created: '2023-06-25T11:08:10.444254Z',
+            platform: 1
+          },
+          {
+            id: 54,
+            reviews: [],
+            title: 'Show Off',
+            storyline: 'watchlist2',
+            active: true,
+            avg_rating: 4.0,
+            number_rating: 589,
+            created: '2023-06-25T11:09:16.479751Z',
+            platform: 1
+          }
+        ],
+        name: 'Netflix',
+        about: 'stream platform 1',
+        website: 'https://github.com/pabelmahbub'
+      },
+      {
+        id: 2,
+        watchlist: [
+          {
+            id: 52,
+            reviews: [],
+            title: 'Ammajan',
+            storyline: 'watchlist2',
+            active: true,
+            avg_rating: 3.0,
+            number_rating: 89,
+            created: '2023-06-25T11:08:28.693569Z',
+            platform: 2
+          },
+          {
+            id: 53,
+            reviews: [],
+            title: 'Avatar',
+            storyline: 'watchlist',
+            active: true,
+            avg_rating: 4.9,
+            number_rating: 9898,
+            created: '2023-06-25T11:08:50.858426Z',
+            platform: 2
+          },
+          {
+            id: 55,
+            reviews: [],
+            title: 'New Movie',
+            storyline: 'watchlistOne',
+            active: false,
+            avg_rating: 4.0,
+            number_rating: 489,
+            created: '2023-06-25T11:09:33.343842Z',
+            platform: 2
+          },
+          {
+            id: 56,
+            reviews: [],
+            title: 'srsr',
+            storyline: 'ghgh',
+            active: true,
+            avg_rating: 4.0,
+            number_rating: 10,
+            created: '2023-06-28T13:13:13.841733Z',
+            platform: 2
+          }
+        ],
+        name: 'Amazon Prime',
+        about: 'stream platform 2',
+        website: 'https://github.com/pabelmahbub'
+      }
+    ]
+
+    const downloadData = () => {
+      const workbook = XLSX.utils.book_new();
+
+      // Create the first sheet
+      const sheet1 = XLSX.utils.json_to_sheet(dataDownload, {
+        header: ['id', 'name', 'about', 'website']
+      });
+      XLSX.utils.book_append_sheet(workbook, sheet1, 'Sheet1');
+
+      // Create the second sheet with watchlist data
+      const watchlistData = dataDownload.map(item => item.watchlist);
+      const sheet2 = XLSX.utils.json_to_sheet(watchlistData.flat(), {
+        header: ['id', 'reviews', 'title', 'storyline', 'active', 'avg_rating', 'number_rating', 'created', 'platform']
+      });
+      XLSX.utils.book_append_sheet(workbook, sheet2, 'Sheet2');
+
+      // Generate and download the Excel file
+      XLSX.writeFile(workbook, 'dataDownload.xlsx');
+    };
+
+
 
   </script>
   
