@@ -175,8 +175,8 @@ import { ref } from 'vue';
     </div>
   </div>
 </template>
-
-<hr />
+```
+```
 ### Download xlxs:
   import { ref } from 'vue';
   import * as XLSX from 'xlsx';
@@ -291,3 +291,4 @@ import { ref } from 'vue';
         website: 'https://github.com/pabelmahbub'
       }
     ]
+```
