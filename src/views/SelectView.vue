@@ -30,6 +30,93 @@
       Selected Rows: {{ selectedRows }}
     </div>
   </div>
+
+  <div class="fixed-table-container">
+    <div class="scrollable-content">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+              <div style="right: 70%; position: absolute; z-index: 99999;">
+                <th style="background-color:aqua; margin: 40px;">HJH</th>
+              </div>
+              <th>HJH</th>
+              <th>HJH</th>
+              <th>HJH</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <div style="margin-right: 70%; position: absolute;z-index: 9999;">
+                <td style="background-color:aqua;">KKKKK</td>
+              </div>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+              <td>KKKKK</td>
+            </tr>
+            <!-- Add more rows here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <div>
+    <table>
+      <tr v-for="(item, index) in items" :key="index">
+        <td>
+          <input v-model="item.value" @input="updateTotal" />
+        </td>
+      </tr>
+    </table>
+    <p>Total: {{ total }}</p>
+  </div>
+
 </template>
 
 <script setup>
@@ -55,12 +142,73 @@ import { ref } from 'vue';
     };
 
     
+
+
+    
+    const dataArray = ref([
+  // Array of objects, each containing 20 items
+  // Example:
+  { items: ["item1", "item2","item3", "item4","item5", "item6","item7", "item8","item9", "item10","item11", "item12","item13", "item2","item1", "item2","item1", "item2"] },
+  { items: ["item1", "item2","item3", "item4","item5", "item6","item7", "item8","item9", "item10","item11", "item12","item13", "item2","item1", "item2","item1", "item2"] },
+  { items: ["item1", "item2","item3", "item4","item5", "item6","item7", "item8","item9", "item10","item11", "item12","item13", "item2","item1", "item2","item1", "item2"] },
+  // ... and so on
+]);
   
 
+
+//add the value:
+const items = ref([
+      { value: 0 },
+      { value: 0 },
+      // Add more items as needed
+    ]);
+
+    const total = ref(0);
+
+    // Function to update the total
+    const updateTotal = () => {
+      total.value = items.value.reduce((sum, item) => sum + parseFloat(item.value || 0), 0);
+    };
+
+    // Initial calculation
+    updateTotal();
+
 </script>
+
 <style scoped>
+.fixed-table-container {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+.scrollable-content {
+  flex: 1 1 auto;
+  overflow-x: auto;
+  position: relative;
+}
+
+.table-wrapper {
+  width: fit-content; /* Adjust this to your preference */
+  overflow: hidden;
+}
+
+table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  white-space: nowrap; /* Prevent text wrapping in cells */
+}
+
+/* Style the individual cells in the table */
+td, th {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+/* Style the fixed column and cell */
+td[style*="background-color: aqua"], th[style*="background-color: aqua"] {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+}
 </style>
-
-
-
-
