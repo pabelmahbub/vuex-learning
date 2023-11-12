@@ -22,6 +22,11 @@ const routes = [
     name: 'select',
     component: () => import('../views/SelectView.vue')
   },
+  {
+    path: '/vue-select',
+    name: 'vue-select',
+    component: () => import('../views/VUESELECTView.vue')
+  },
 ]
 
 const router = createRouter({

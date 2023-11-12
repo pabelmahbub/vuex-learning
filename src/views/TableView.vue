@@ -91,6 +91,31 @@
     <button @click="downloadData">Download Excel</button>
   </div>
 
+  <hr />
+
+  <div style="margin: 10px; background-color: rgb(244, 252, 200);padding-top:80px;padding-bottom:80px;">
+    <label for="name">Name:</label>
+    <input type="text" id="name" v-model="name" placeholder="Enter your name" />
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" v-model="email" placeholder="Enter your email" />
+
+    <label for="resume">Upload Resume:</label>
+    <input type="file" id="resume" @change="handleFileUploadResume" />
+
+    <button @click="submitFormResume">Submit</button>
+  </div>
+
+
+  <div>
+    <button @click="calculateTable">Click to Calculate</button>
+    <table v-if="table">
+      <tr v-for="(row, rowIndex) in table" :key="rowIndex">
+        <td v-for="(cell, colIndex) in row" :key="colIndex">{{ cell }}</td>
+      </tr>
+    </table>
+  </div>
+
   </template>
   
   <script setup>
@@ -157,24 +182,32 @@ const watchList = ref({
     // You can use `onMounted` or any other lifecycle hook to fetch the data
     
     const submitForm = async () => {
-      try {
-        const response = await axios.post('http://127.0.0.1:8000/watch/list/', watchList.value);
-        console.log(response.data); // Handle the response as per your requirements
-              // Reset the watchList object to clear the input fields
-      watchList.value = {
-        title: '',
-        storyline: '',
-        platform: null,
-        active: false,
-        avg_rating: 0,
-        number_rating: 0,
-        created: null
-      };
-
-      } catch (error) {
-        alert(error);
-      }
+  try {
+    const dataToSend = {
+      ...watchList.value,
+      userEmail: 'example@example.com', // Replace with the actual user email
+      timestamp: new Date().toISOString() // Replace with the actual timestamp logic
     };
+
+    const response = await axios.post('http://127.0.0.1:8000/watch/list/', dataToSend);
+    console.log(response.data); // Handle the response as per your requirements
+    
+    // Reset the watchList object to clear the input fields
+    watchList.value = {
+      title: '',
+      storyline: '',
+      platform: null,
+      active: false,
+      avg_rating: 0,
+      number_rating: 0,
+      created: null
+    };
+
+  } catch (error) {
+    alert(error);
+  }
+};
+
 
 
 
@@ -362,6 +395,51 @@ onMounted(() => {
     };
 
 
+    //resume section:
+
+    const name = ref('');
+    const email = ref('');
+    const resume = ref(null);
+
+    const handleFileUploadResume = (event) => {
+      const file = event.target.files[0];
+      resume.value = file;
+    };
+
+    const submitFormResume = () => {
+      const formData = {
+        name: name.value,
+        email: email.value,
+        resume: resume.value
+      };
+      alert('Form Data:', formData);
+      // Send formData to your server or handle as needed
+    };
+
+    
+
+
+
+
+    const table = ref([]);
+    const rowCount = 10; // Number of rows in the table
+    const colCount = 10; // Number of columns in the table
+
+    // Initialize the table as a 2D array with null values
+    for (let i = 0; i < rowCount; i++) {
+      table.value.push(new Array(colCount).fill(null));
+    }
+
+    const calculateTable = () => {
+      for (let i = 0; i < rowCount; i++) {
+        for (let j = 0; j < colCount; j++) {
+          // Calculate each cell in the table
+          table.value[i][j] = (i + 1) * (j + 1);
+        }
+      }
+    };
+
+  
 
   </script>
   
